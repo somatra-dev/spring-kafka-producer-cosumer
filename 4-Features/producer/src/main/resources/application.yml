@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: producer
+
+  kafka:
+    bootstrap-servers: localhost:9094
+server:
+  port: 8081
+
+logging:
+  level:
+    org.apache.kafka: INFO
+    org.springframework.kafka: INFO
+    co.istad.consumer: DEBUG

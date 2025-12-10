@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: consumer
+
+  kafka:
+    bootstrap-servers: localhost:9094
+
+server:
+  port: 8082
+
+logging:
+  level:
+    org.apache.kafka: INFO
+    org.springframework.kafka: INFO
+    co.istad.consumer: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %highlight(%-5level) [%thread] %cyan([P=%X{kafka_receivedPartition} O=%X{kafka_offset}]) %magenta(%logger{15}) - %msg%n"
+
+
+
+
+
+
+
+
+
