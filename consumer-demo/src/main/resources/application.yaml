@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: consumer-demo
+
+  # config kafka consumer
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:29092
+      group-id: consumer-demo-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    properties:
+      request.timeout.ms: 30000
+      session.timeout.ms: 10000
+      connection.max.idle.ms: 540000
