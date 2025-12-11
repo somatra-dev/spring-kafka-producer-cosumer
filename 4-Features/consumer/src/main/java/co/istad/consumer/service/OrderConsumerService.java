@@ -37,23 +37,23 @@ public class OrderConsumerService {
                 order.getCustomerId(),
                 partition, offset, key);
 
-        if (order.isPoisonPill()) {
-            log.error("POISON PILL DETECTED → {}", order.getOrderId());
-            throw new IllegalArgumentException("Quantity cannot be 0");
-        }
+//        if (order.isPoisonPill()) {
+//            log.error("POISON PILL DETECTED → {}", order.getOrderId());
+//            throw new IllegalArgumentException("Quantity cannot be 0");
+//        }
 
         // Simulate processing
-        try { Thread.sleep(300); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+//        try { Thread.sleep(300); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
 
         log.info("PROCESSED SUCCESSFULLY → OrderId={}", order.getOrderId());
         ack.acknowledge();
     }
 
-    @KafkaListener(topics = "orders-topic.DLT", groupId = "dlt-group")
-    public void consumeDLT(@Payload OrderEvent order,
-                           @Header(KafkaHeaders.RECEIVED_KEY) String key,
-                           @Header(KafkaHeaders.OFFSET) long offset) {
-        log.warn("DLT RECEIVED → Failed Order: {} | Key: {} | Offset: {}",
-                order.getOrderId(), key, offset);
-    }
+//    @KafkaListener(topics = "orders-topic.DLT", groupId = "dlt-group")
+//    public void consumeDLT(@Payload OrderEvent order,
+//                           @Header(KafkaHeaders.RECEIVED_KEY) String key,
+//                           @Header(KafkaHeaders.OFFSET) long offset) {
+//        log.warn("DLT RECEIVED → Failed Order: {} | Key: {} | Offset: {}",
+//                order.getOrderId(), key, offset);
+//    }
 }

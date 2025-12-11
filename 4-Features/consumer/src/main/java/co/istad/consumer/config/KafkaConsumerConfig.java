@@ -42,46 +42,46 @@ public class KafkaConsumerConfig {
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
+    // ignore
     // Bean for DLT PRODUCER FACTORY
-    @Bean
-    public ProducerFactory<String, Object> dltProducerFactory() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JacksonJsonSerializer.class);
-        props.put(ProducerConfig.ACKS_CONFIG, "all");
-        props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
-        return new DefaultKafkaProducerFactory<>(props);
-    }
-
-    @Bean
-    public KafkaTemplate<String, Object> deadLetterKafkaTemplate() {
-        return new KafkaTemplate<>(dltProducerFactory());
-    }
+//    @Bean
+//    public ProducerFactory<String, Object> dltProducerFactory() {
+//        Map<String, Object> props = new HashMap<>();
+//        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+//        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+//        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JacksonJsonSerializer.class);
+//        props.put(ProducerConfig.ACKS_CONFIG, "all");
+//        props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
+//        return new DefaultKafkaProducerFactory<>(props);
+//    }
+//
+//    @Bean
+//    public KafkaTemplate<String, Object> deadLetterKafkaTemplate() {
+//        return new KafkaTemplate<>(dltProducerFactory());
+//    }
 
     // Bean for LISTENER CONTAINER FACTORY
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, OrderEvent> orderKafkaListenerContainerFactory(
-            ConsumerFactory<String, OrderEvent> consumerFactory,
-            KafkaTemplate<String, Object> deadLetterKafkaTemplate) {
+            ConsumerFactory<String, OrderEvent> consumerFactory) {
 
         var factory = new ConcurrentKafkaListenerContainerFactory<String, OrderEvent>();
         factory.setConsumerFactory(consumerFactory);
         factory.setConcurrency(3);
 
         // DLT Recoverer
-        DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(deadLetterKafkaTemplate);
+//        DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(deadLetterKafkaTemplate);
 
         // Error Handler with 3 retries
-        DefaultErrorHandler errorHandler = new DefaultErrorHandler(
-                recoverer,
-                new FixedBackOff(1000L, 3L)
-        );
+//        DefaultErrorHandler errorHandler = new DefaultErrorHandler(
+//                recoverer,
+//                new FixedBackOff(1000L, 3L)
+//        );
 
-        // Don't retry poison pills (quantity = 0)
-        errorHandler.addNotRetryableExceptions(IllegalArgumentException.class);
-
-        factory.setCommonErrorHandler(errorHandler);
+//        // Don't retry poison pills (quantity = 0)
+//        errorHandler.addNotRetryableExceptions(IllegalArgumentException.class);
+//
+//        factory.setCommonErrorHandler(errorHandler);
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
 
         return factory;
