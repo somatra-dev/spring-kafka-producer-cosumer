@@ -2,13 +2,17 @@ spring:
   application:
     name: producer-demo
 
-
   # config kafka producer
   kafka:
     producer:
       bootstrap-servers: localhost:29092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-  
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+      properties:
+        spring:
+          json:
+            add:
+              type:
+                headers: false
 server:
   port: 8081

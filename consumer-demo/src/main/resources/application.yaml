@@ -9,8 +9,17 @@ spring:
       group-id: consumer-demo-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    properties:
-      request.timeout.ms: 30000
-      session.timeout.ms: 10000
-      connection.max.idle.ms: 540000
+      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+      properties:
+        spring:
+          json:
+            value:
+              default:
+                type: co.istad.kh.consumer_demo.listener.OrderEvent
+
+            trusted:
+              packages: co.istad.kh.consumer_demo.listener
+            use:
+              type:
+                headers: false
+      
